@@ -1,16 +1,11 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-const fs = require("fs");
-const path = require("path");
-const { createLogDirectory } = require("./utils/logUtils");
+const { createLogStream } = require("./utils/logUtils");
 const connectBlogDB = require("./utils/dbConnectionHelper");
+const router = require("./routes/mainRoutes");
 
-const logDirectory = createLogDirectory();
-
-const logStream = fs.createWriteStream(path.join(logDirectory, "access.log"), {
-  flags: "a",
-});
+const logStream = createLogStream();
 
 const startServer = async () => {
   await connectBlogDB();
@@ -26,9 +21,7 @@ const startServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(morgan("combined", { stream: logStream }));
 
-  app.get("/test", (req, res) => {
-    res.send("Blog API is working");
-  });
+  app.use("/api", router);
 
   return app;
 };

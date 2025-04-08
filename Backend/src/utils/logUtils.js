@@ -11,4 +11,12 @@ const createLogDirectory = () => {
   return logDirectory;
 };
 
-module.exports = { createLogDirectory };
+const createLogStream = () => {
+  const dir = createLogDirectory();
+  const logStream = fs.createWriteStream(path.join(dir, "access.log"), {
+    flags: "a",
+  });
+  return logStream;
+};
+
+module.exports = { createLogStream };
