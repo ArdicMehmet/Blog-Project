@@ -13,10 +13,9 @@ router.use((req, res, next) => {
 });
 
 router.use((err, req, res, next) => {
-  console.error(err);
-  res
-    .status(500)
-    .json(errorResponse(err.message || "Something went wrong", 500));
+  const statusCode = err?.statusCode || 500;
+  const message = err?.message || "Something went wrong";
+  res.status(statusCode).json(errorResponse(message, statusCode));
 });
 
 module.exports = router;

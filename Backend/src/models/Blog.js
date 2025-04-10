@@ -11,6 +11,11 @@ const blogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      enum: ["active", "passive"],
+      default: "passive",
+    },
     tags: {
       type: [String],
       default: [],
