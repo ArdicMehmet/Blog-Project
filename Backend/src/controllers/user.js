@@ -29,7 +29,12 @@ const loginUserController = async (req, res, next) => {
 };
 const currentUserController = async (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1]; // 'Bearer token alma'
+    const authorizationHeader = req.headers.authorization;
+
+    if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+      throw createError(400, "Invalid token format");
+    }
+    const token = authorizationHeader?.split(" ")[1]; // 'Bearer token alma'
 
     if (!token) {
       throw createError(401, "Token is required");
